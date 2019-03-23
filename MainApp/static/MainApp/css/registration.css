@@ -1,0 +1,38 @@
+body {
+    /*padding-top: 5rem;*/
+}
+
+#logo_img {
+    width: 3em;
+    margin: 5px 0px;
+}
+
+#registration-container {
+    border: 1px solid #777;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+#hint_id_username {
+    display: none;
+}
+
+#hint_id_password2 {
+    display: none;
+}
+
+.selectdatewidget {
+    display: inline-block;
+}
+
+select[name$="_day"].selectdatewidget {
+    width: 27%;
+}
+select[name$="_month"].selectdatewidget {
+    width: 38%;
+}
+select[name$="_year"].selectdatewidget {
+    width: 35%;
+}
