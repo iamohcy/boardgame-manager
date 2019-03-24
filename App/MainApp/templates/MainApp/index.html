@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% load static %}
+{% block custom_css %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link href="{% static "MainApp/css/index.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="full-height" id="container-div">
+    <div class="full-height flex">
+        <div id="background-div" class="d-none d-lg-block">
+            <div class="dim-overlay">
+                <div id="background-text-div" class="vertical-center">
+                    <div class="horizontal-center">
+                        <div class="background-text-wrapper"><span><i class="fas fa-search fa-fw"></i>&nbsp&nbsp Discover a world beyond Monopoly</span></div>
+                        <div class="background-text-wrapper"><span><i class="fas fa-chess-rook fa-fw"></i>&nbsp&nbsp Manage your game collection</span></div>
+                        <div class="background-text-wrapper"><span><i class="fas fa-users fa-fw"></i>&nbsp&nbsp Meet fellow Board Game lovers</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="content-div" class="vertical-center horizontal-center">
+            <div id="content-sub-div">
+                <div style="text-align: center">
+                    <img src="{% static "MainApp/images/dice_icon_thumb.png" %}" id="logo_img" alt="logo">
+                </div>
+                <div>
+                    <h4>Welcome to Dice Dice Baby</h4>
+                    <p>A Board Game Management Tool that Sparks Joy</p>
+                </div>
+                <div>
+                    <h6>Join today.</h6>
+                    <button type="button" class="btn btn-primary">Sign Up</button>
+                    <button type="button" class="btn btn-outline-primary">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- /.container -->
+{% endblock %}
+
+

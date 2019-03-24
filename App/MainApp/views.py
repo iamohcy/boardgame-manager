@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from registration.backends.default.views import RegistrationView
 from .forms import BgRegistrationForm
 from users.models import Profile
+from django.shortcuts import render
 
 class BgRegistrationView(RegistrationView):
 
@@ -30,4 +31,5 @@ class BgRegistrationView(RegistrationView):
         return new_user
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the main index.")
+    context = {}
+    return render(request, 'MainApp/index.html', context)
