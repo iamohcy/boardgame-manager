@@ -32,4 +32,11 @@ class BgRegistrationView(RegistrationView):
 
 def index(request):
     context = {}
-    return render(request, 'MainApp/index.html', context)
+    if request.user.is_authenticated:
+        return render(request, 'MainApp/main.html', context)
+    else:
+        return render(request, 'MainApp/index.html', context)
+
+def login(request):
+    context = {}
+    return render(request, 'MainApp/login.html', context)

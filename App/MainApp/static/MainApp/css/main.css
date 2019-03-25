@@ -7,32 +7,6 @@ body {
     margin: 0px;
 }
 
-#background-div {
-    position: relative;
-    width: 50%;
-    height: 100%;
-    background: url('/static/MainApp/images/index_boardgames.jpg');
-    /*background: url('/static/MainApp/images/index_boardgames_dim.jpg');*/
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    background-repeat:   no-repeat;
-    background-position: center center;              /* optional, center the image */
-}
-
-.dim-overlay {
-    width: 100%;
-    height: 100%;
-    /* Note parent div must have position: relative for this to work as
-       absolute position takes relative to first parent with a defined position
-       so if we don't do this it takes from page, and will fill up entire page */
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: rgba(0,0,0,.4);
-}
-
 #background-text-div {
     color: white;
 }
@@ -71,10 +45,9 @@ body {
 }
 
 #logo_img {
-    width: 5em;
+    width: 10em;
     margin-bottom: 1em;
 }
-
 
 /*html {
    background: url(images/bg.jpg) no-repeat center center fixed;

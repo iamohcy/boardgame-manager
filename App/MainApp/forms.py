@@ -11,7 +11,7 @@ class BgRegistrationForm(RegistrationFormUniqueEmail):
 
     first_name = forms.CharField(widget=forms.TextInput())
     last_name = forms.CharField(widget=forms.TextInput())
-    date_of_birth = forms.DateField(input_formats=['%d/%m/%Y'],
+    date_of_birth = forms.DateField(
                         # widget=forms.TextInput(
                         #     attrs={'type': 'date'}
                         # )

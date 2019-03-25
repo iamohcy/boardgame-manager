@@ -3,13 +3,13 @@
 
 {% load static %}
 {% block custom_css %}
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link href="{% static "MainApp/css/index.css" %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
 <div class="full-height" id="container-div">
     <div class="full-height flex">
+        <!-- Left background div -->
         <div id="background-div" class="d-none d-lg-block">
             <div class="dim-overlay">
                 <div id="background-text-div" class="vertical-center">
@@ -22,6 +22,7 @@
             </div>
         </div>
 
+        <!-- Right div with login/registration buttons and login bar -->
         <div id="content-div" class="vertical-center horizontal-center">
             <div id="content-sub-div">
                 <div style="text-align: center">
@@ -33,8 +34,8 @@
                 </div>
                 <div>
                     <h6>Join today.</h6>
-                    <button type="button" class="btn btn-primary">Sign Up</button>
-                    <button type="button" class="btn btn-outline-primary">Login</button>
+                    <a role="button" href="{% url 'registration_register' %}" class="btn btn-primary">Sign Up</a>
+                    <a role="button" href="{% url 'auth_login' %}" class="btn btn-outline-primary">Login</a>
                 </div>
             </div>
         </div>

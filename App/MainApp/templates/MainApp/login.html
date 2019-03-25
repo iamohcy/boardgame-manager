@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load widget_tweaks %}
 
 {% load static %}
 {% block custom_css %}
@@ -8,11 +7,12 @@
 {% endblock %}
 
 {% block content %}
+
 <div class="full-height" id="container-div">
     <div class="full-height flex">
         <!-- Right div with login/registration buttons and login bar -->
         <div id="login-div" class="vertical-center horizontal-center">
-            <div class="card" id="login-card">
+            <div class="card">
                 <article class="card-body">
                     <!-- <img src="{% static "MainApp/images/dice_icon_thumb.png" %}" id="logo_img" alt="logo"> -->
                     <h4 class="card-title text-center mb-4 mt-1">Sign in</h4>
@@ -29,8 +29,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                              </div>
-                            {{ form.username|add_class:'form-control' }}
-                            <!-- <input name="" class="form-control" placeholder="Username" name="username" type="username"> -->
+                            <input name="" class="form-control" placeholder="Username" type="username">
                         </div> <!-- input-group.// -->
                         </div> <!-- form-group// -->
                         <div class="form-group">
@@ -38,8 +37,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                              </div>
-                            {{ form.password|add_class:'form-control' }}
-                             <!-- <input class="form-control" placeholder="******" name="password" type="password"> -->
+                             <input class="form-control" placeholder="******" type="password">
                         </div> <!-- input-group.// -->
                         </div> <!-- form-group// -->
                         <div class="form-group">

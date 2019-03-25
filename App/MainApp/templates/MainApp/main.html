@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% load static %}
+{% block custom_css %}
+    <link href="{% static "MainApp/css/main.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="full-height" id="container-div">
+    <div class="full-height flex">
+        <!-- Left background div -->
+        <!-- Right div with login/registration buttons and login bar -->
+        <div id="content-div" class="vertical-center horizontal-center">
+            <div id="content-sub-div">
+                <div style="text-align: center">
+                    <img src="{% static "MainApp/images/dice_icon_thumb.png" %}" id="logo_img" alt="logo">
+                </div>
+                <div>
+                    <h4>Welcome to Dice Dice Babyyyyyyyyy</h4>
+                    <p>A Board Game Management Tool that Sparks Joy</p>
+                </div>
+                <div>
+                    <h1>YOU HAVE LOGGED IN!!!</h1>
+                </div>
+                <a role="button" href="{% url 'auth_logout' %}" class="btn btn-primary">Log Out</a>
+            </div>
+        </div>
+    </div>
+</div><!-- /.container -->
+{% endblock %}
+
+
