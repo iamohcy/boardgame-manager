@@ -1,0 +1,4 @@
+django=2.1.7=py37_0
+django-crispy-forms=1.7.2=pypi_0
+django-registration-redux=2.5=pypi_0
+boardgamegeek2=1.0.1=pypi_0
