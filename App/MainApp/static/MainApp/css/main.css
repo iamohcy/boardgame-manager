@@ -1,52 +1,21 @@
-body {
+/*body {
     background: white;
 }
+*/
 
-#container-div {
-    padding: 0px;
-    margin: 0px;
+/* LINK BGG FORM */
+
+#bgg-input {
+    width: 400px;
 }
 
-#background-text-div {
-    color: white;
-}
-
-#background-text-div span{
-    font-size: 1.25rem;
-}
-
-.background-text-wrapper {
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
-#content-div {
-    width: 50%;
-    height: 100%;
-    padding: 0px 20px;
-}
-
-#content-sub-div {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#content-sub-div .btn {
-    display: block;
+#bgg-input .form-group {
+    margin-bottom: 0px;
     width: 100%;
-    border-radius: 12px;
-    margin-top: 1em;
-}
-#content-sub-div .btn-outline-primary:hover {
-    color: #007bff;
-    background-color: #eeeeff;
-    border-color: #007bff;
 }
 
-#logo_img {
-    width: 10em;
-    margin-bottom: 1em;
+#bgg-input button {
+    margin-left: 15px;
 }
 
 /*html {
@@ -56,4 +25,59 @@ body {
    -o-background-size: cover;
    background-size: cover;
 }*/
-9
+
+
+
+.square-image-wrapper {
+    width: 100%;
+    padding-bottom: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+/*  background-image: url('http://i.stack.imgur.com/GA6bB.png');
+  background-size:cover;
+  background-repeat:no-repeat;*/
+
+#collection-div {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+.square-image-wrapper > img{
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+}
+
+@media (min-width: 576px) {
+    .card-columns {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 768px) {
+    .card-columns {
+        column-count: 3;
+    }
+}
+
+@media (min-width: 992px) {
+    .card-columns {
+        column-count: 5;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card-columns {
+        column-count: 6;
+    }
+}
+
+/* Other aspect ratios to try:
+ * 56.25% = 16:9
+ * 75% = 4:3
+ * 66.66% = 3:2
+ * 62.5% = 8:5
+ */

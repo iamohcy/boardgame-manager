@@ -23,5 +23,6 @@ urlpatterns = [
 
     # url(r'^$', RedirectView.as_view(url='/index')),
     path('', include('MainApp.urls')),
+    path('', include('users.urls')),
 ]
 

@@ -7,6 +7,8 @@ from django.http import HttpResponse
 from registration.backends.default.views import RegistrationView
 from .forms import BgRegistrationForm
 from users.models import Profile
+from games.models import Collection
+from users.forms import LinkBggForm
 from django.shortcuts import render
 
 class BgRegistrationView(RegistrationView):
@@ -27,16 +29,25 @@ class BgRegistrationView(RegistrationView):
 
         new_profile = Profile.objects.create(user=new_user, first_name=_first_name,
                                              last_name=_last_name, date_of_birth=_date_of_birth)
-        new_profile.save()
+        new_collection = Collection.objects.create(user=new_user)
+
+        # new_user.save()
+        # new_collection.save()
+        # new_profile.save()
         return new_user
 
 def index(request):
-    context = {}
     if request.user.is_authenticated:
+        link_bgg_form = LinkBggForm()
+        #.all() so it's iterable
+        user_collection = request.user.collection.collectionboardgame_set.all()
+        filtered_user_collection = user_collection.filter(boardgame__is_expansion=False).order_by('boardgame__name')
+        context = {'link_bgg_form': link_bgg_form, 'user_collection': filtered_user_collection}
         return render(request, 'MainApp/main.html', context)
     else:
+        context={}
         return render(request, 'MainApp/index.html', context)
 
 def login(request):
-    context = {}
+    context = {noNavBar: True}
     return render(request, 'MainApp/login.html', context)

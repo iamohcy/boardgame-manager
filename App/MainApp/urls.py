@@ -8,8 +8,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('login/', auth_views.LoginView.as_view(template_name='MainApp/login.html'), name='login'),
 
-
-
     # Accounts
     path('accounts/login/', auth_views.LoginView.as_view(redirect_authenticated_user=True,
                                                          template_name='registration/login.html'), name='auth_login'),

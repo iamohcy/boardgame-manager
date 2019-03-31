@@ -1,33 +1,47 @@
-{% extends "base.html" %}
+{% extends "base_navbar.html" %}
 {% load i18n %}
-
 {% load static %}
+{% load crispy_forms_tags %}
+
 {% block custom_css %}
     <link href="{% static "MainApp/css/main.css" %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-<div class="full-height" id="container-div">
-    <div class="full-height flex">
-        <!-- Left background div -->
-        <!-- Right div with login/registration buttons and login bar -->
-        <div id="content-div" class="vertical-center horizontal-center">
-            <div id="content-sub-div">
-                <div style="text-align: center">
-                    <img src="{% static "MainApp/images/dice_icon_thumb.png" %}" id="logo_img" alt="logo">
-                </div>
-                <div>
-                    <h4>Welcome to Dice Dice Babyyyyyyyyy</h4>
-                    <p>A Board Game Management Tool that Sparks Joy</p>
-                </div>
-                <div>
-                    <h1>YOU HAVE LOGGED IN!!!</h1>
-                </div>
-                <a role="button" href="{% url 'auth_logout' %}" class="btn btn-primary">Log Out</a>
+
+<div id="bgg-input" class="horizontal-center">
+    <p class="mb-1">Enter your Board Game Geek Username</p>
+    <form method="post" action="/link_bgg/">
+        {% csrf_token %}
+            <!-- <input type="text" id="bgg-username" class="form-control" placeholder="BGG Username" aria-label="BGG Username"> -->
+        <div class="d-flex flex-row">
+            {{ link_bgg_form.bgg_username|as_crispy_field }}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+
+<div id="collection-div" class="card-columns">
+    {% for c_item in user_collection %}
+    <!-- <div class="col-sm-4 col-md-3 boardgame-container"> -->
+        <div class="card">
+            <!-- <div class="square-image-wrapper"> -->
+                <img class="card-img-top boardgame-image" src="{{c_item.boardgame.image_link}}" alt="Card image cap">
+            <!-- </div> -->
+            <div class="card-body">
+                <h5 class="card-title">{{c_item.boardgame.name}}</h5>
+<!--                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+                <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
             </div>
         </div>
+    <!-- </div> -->
+    {% endfor %}
     </div>
-</div><!-- /.container -->
+</div>
+
 {% endblock %}
 
 
+{% block custom_js %}
+    <script src="{% static "MainApp/scripts/main.js" %}" %}"></script>
+{% endblock %}

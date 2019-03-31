@@ -1,3 +1,17 @@
 body {
     padding-top: 5rem;
 }
+
+/* NAVBAR */
+.navbar-brand {
+    font-family: 'Slimbots Regular';
+    font-weight: normal;
+    font-size: 30px;
+}
+
+.app-navbar {
+    padding-bottom: 0px;
+    padding-left: 10px;
+    padding-top: 3px;
+    padding:right: 10px;
+}

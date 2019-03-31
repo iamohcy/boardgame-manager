@@ -34,3 +34,13 @@ main {
 .flex {
     display: flex;
 }
+
+
+/*@font-face {
+    font-family: 'Slimbots Italic';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Slimbots Italic'), url('Slimbots Italic.woff') format('woff');
+}
+*/
+
