@@ -40,7 +40,7 @@ def index(request):
     if request.user.is_authenticated:
         link_bgg_form = LinkBggForm()
         #.all() so it's iterable
-        user_collection = request.user.collection.collectionboardgame_set.all()
+        user_collection = request.user.collection.boardgames.all()
         filtered_user_collection = user_collection.filter(boardgame__is_expansion=False).order_by('boardgame__name')
         context = {'link_bgg_form': link_bgg_form, 'user_collection': filtered_user_collection}
         return render(request, 'MainApp/main.html', context)

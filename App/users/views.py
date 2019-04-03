@@ -5,11 +5,14 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect
 
+from rest_framework.renderers import JSONRenderer
+
 # BGG Imports
 from boardgamegeek import BGGClient
 from boardgamegeek.exceptions import BGGItemNotFoundError
 
 from users.forms import LinkBggForm
+from games.serializers import CollectionSerializer
 
 # Models
 from games.models import BoardGame, BoardGameCategory, BoardGameMechanic, \
@@ -35,7 +38,7 @@ GLOBAL_bggApi = BGGClient()
 # args:
 #   request: HTTP Request object
 #   collection: BGG collection of user
-def processUserData(request, username):
+def getCollection(request, username):
 
     try:
         # user = bgg.user(form.cleaned_data['bgg_username'])
@@ -68,7 +71,7 @@ def processUserData(request, username):
 def processCollection(request, bgg_collection):
     user = request.user
 
-    user_collection_set = user.collection.collectionboardgame_set
+    user_collection_set = user.collection.boardgames
     all_games = []
 
     new_game_ids = []
@@ -77,14 +80,14 @@ def processCollection(request, bgg_collection):
     # game which is an entire bgg board game object (e.g. contains image links, etc.)
     for bgg_c_game in bgg_collection.items:
         bgg_id = bgg_c_game.id
-        print("Trying to find bgg_id: " + str(bgg_id)) # DEBUG
+        # print("Trying to find bgg_id: " + str(bgg_id)) # DEBUG
         game_valid = False
 
         # Step 1 - Get or create board game object
         try:
             # Board game already in database
             ddb_boardgame = BoardGame.objects.get(pk=bgg_id)
-            print("It exists!! bgg_id: " + str(bgg_id)) # DEBUG
+            # print("It exists!! bgg_id: " + str(bgg_id)) # DEBUG
             valid_game_ids.append(bgg_id)
             # TODO UPDATE!! - Ranks, Ratings, etc.
         except:
@@ -146,15 +149,40 @@ def link_bgg(request):
             # Process the data in form.cleaned_data
             print(form.cleaned_data['bgg_username'])
             try:
-                list_of_games = processUserData(request, form.cleaned_data['bgg_username'])
+                list_of_games = getCollection(request, form.cleaned_data['bgg_username'])
+
                 response = JsonResponse({'bgg_username': form.cleaned_data['bgg_username'],
                                          'games': list_of_games})
-            except BGGItemNotFoundError:
-                response = JsonResponse({'Error': 'User not found!'})
-        else:
-            response = JsonResponse({'Error': 'invalid form!'})
 
-        return redirect('/')
+                # print("Processing user collection into JSON data...")
+                start_time = time.process_time()
+
+                user_collection = request.user.collection
+                serializer = CollectionSerializer(user_collection)
+                json_data = JSONRenderer().render(serializer.data)
+
+                end_time = time.process_time()
+                print ("User collection converted into JSON in %f s" % (end_time-start_time))
+                return HttpResponse(json_data, content_type='application/json')
+            except BGGItemNotFoundError:
+                return JsonResponse({'Error': 'User not found!'})
+        else:
+            return JsonResponse({'Error': 'invalid form!'})
+
+        # return redirect('/')
+        # return response
+    else:
+        return HttpResponse("Invalid non POST call to link_bgg!")
+
+@login_required
+def get_user_collection(request):
+    if request.method == 'GET': # If the form has been submitted...
+        user_collection = request.user.collection
+        serializer = CollectionSerializer(user_collection)
+        json_data = JSONRenderer().render(serializer.data)
+
+        return HttpResponse(json_data, content_type='application/json')
+        # return redirect('/')
         # return response
     else:
         return HttpResponse("Invalid non POST call to link_bgg!")

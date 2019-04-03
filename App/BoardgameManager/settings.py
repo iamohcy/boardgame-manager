@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     # External apps
     'crispy_forms',
     'widget_tweaks',
+    'rest_framework',
 
     # Project apps
     'MainApp',
@@ -160,3 +161,10 @@ REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
 DATE_INPUT_FORMATS = ['%d/%m/%Y', ]
 
 LOGIN_REDIRECT_URL = '/'
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [],
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+}

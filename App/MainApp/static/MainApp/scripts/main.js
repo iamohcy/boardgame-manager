@@ -45,6 +45,73 @@ $(function() {
         }
     })
 
+    // // Config Options
+    // var slideout = new Slideout({
+    //   'panel': document.getElementById('main'),
+    //   'menu': document.getElementById('navbar-main'),
+    //   'padding': 256,
+    //   'tolerance': 70
+    // });
+
+    // // Default Open
+    // slideout.open();
+
+    // // Toggle button
+    // document.querySelector('.toggle-button').addEventListener('click', function() {
+    //   slideout.toggle();
+    //   if(slideout.isOpen()){
+    //     alert("You Opened!");
+    //   }else{
+    //     alert("You Closed!");
+    //   }
+    // });
+
+})
+
+console.log("HELLO!");
+
+var collectionArea = new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#collection-div',
+    data() {
+        return {
+            collection: null
+        }
+    },
+    computed: {
+
+// Filter params
+// min/max players
+// duration
+// mechanics
+
+        no_expansions: function() {
+            if (this.collection) {
+                return this.collection.boardgames.filter(function(bg_item) {
+                    return !bg_item.boardgame.is_expansion
+                })
+            }
+            else {
+                return null;
+            }
+        },
+        expansions: function() {
+            if (this.collection) {
+                return this.collection.boardgames.filter(function(bg_item) {
+                    return bg_item.boardgame.is_expansion
+                })
+            }
+            else {
+                return null;
+            }
+        }
+    },
+    mounted() {
+        var self = this;
+        axios
+            .get('user_collection')
+            .then(response => (this.collection = response.data))
+    }
 })
 
 // $(document).on('click', '.js-gotoMsgs', function() {

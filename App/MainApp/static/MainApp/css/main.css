@@ -26,52 +26,114 @@
    background-size: cover;
 }*/
 
+/*  Thumbnail images */
+/*  This seems a bit ridiculous, but what we're trying to do here is using a
+    padding hack, force square-image-div-wrapper to be a square ratio
 
+    Next we anchor square-image-div to the square-image-div-wrapper with absolute
+    positioning so it doesn't appear below the padding, and use that to center
+    the image in it with flex box positioning*/
 
-.square-image-wrapper {
+.square-image-div-wrapper {
     width: 100%;
     padding-bottom: 100%;
     position: relative;
     overflow: hidden;
 }
 
+.square-image-div-wrapper > div{
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+}
+
+.square-image-div {
+/* This is only if we are using img, and not background fill */
+/*    display: flex;
+    align-items: center;*/
+
+/* This is if we are using background-url and fill*/
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center top;
+}
+
+.fill {
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+}
+
+
+
 /*  background-image: url('http://i.stack.imgur.com/GA6bB.png');
   background-size:cover;
   background-repeat:no-repeat;*/
 
 #collection-div {
-    width: 60%;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
 }
 
-.square-image-wrapper > img{
-    position: absolute;
-    top: 0; bottom: 0; left: 0; right: 0;
-}
-
-@media (min-width: 576px) {
-    .card-columns {
-        column-count: 2;
-    }
-}
-
 @media (min-width: 768px) {
-    .card-columns {
-        column-count: 3;
+    #collection-div {
+        width: 100%;
     }
 }
 
 @media (min-width: 992px) {
-    .card-columns {
-        column-count: 5;
+    #collection-div {
+        width: 90%;
+    }
+}
+
+@media (min-width: 1500px) {
+    #collection-div {
+        width: 80%;
+    }
+}
+
+@media (min-width: 1800px) {
+    #collection-div {
+        width: 60%;
+    }
+}
+
+@media (min-width: 576px) {
+    .bg-container {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 50% !important;
+        flex: 0 0 50% !important;
+        max-width: 50%;
+    }
+}
+
+@media (min-width: 768px) {
+    .bg-container {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 33.3% !important;
+        flex: 0 0 33.3% !important;
+        max-width: 33.3%;
+    }
+}
+
+@media (min-width: 992px) {
+    .bg-container {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 20% !important;
+        flex: 0 0 20% !important;
+        max-width: 20%;
     }
 }
 
 @media (min-width: 1200px) {
-    .card-columns {
-        column-count: 6;
+    .bg-container {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 16.6% !important;
+        flex: 0 0 16.6% !important;
+        max-width: 16.6%;
     }
 }
 
@@ -81,3 +143,50 @@
  * 66.66% = 3:2
  * 62.5% = 8:5
  */
+
+
+
+/* SLIDEOUT PANEL */
+
+body {
+  width: 100%;
+  height: 100%;
+}
+
+.slideout-menu {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 256px;
+  min-height: 100vh;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  z-index: 0;
+  display: none;
+}
+
+.slideout-menu-left {
+  left: 0;
+}
+
+.slideout-menu-right {
+  right: 0;
+}
+
+.slideout-panel {
+  position: relative;
+  z-index: 1;
+  will-change: transform;
+  background-color: #FFF; /* A background-color is required */
+  min-height: 100vh;
+}
+
+.slideout-open,
+.slideout-open body,
+.slideout-open .slideout-panel {
+  overflow: hidden;
+}
+
+.slideout-open .slideout-menu {
+  display: block;
+}

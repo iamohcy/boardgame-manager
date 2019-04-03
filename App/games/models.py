@@ -44,7 +44,7 @@ class BoardGameManager(models.Manager):
                     ddb_mechanic = BoardGameMechanic.objects.create(
                         name = mechanic_name,
                     )
-                ddb_mechanic.boardgames.add(ddb_boardgame)
+                ddb_boardgame.mechanics.add(ddb_mechanic)
 
         # Create categories objects if they don't already exist, otherwise
         # just link them
@@ -57,7 +57,7 @@ class BoardGameManager(models.Manager):
                     ddb_category = BoardGameCategory.objects.create(
                         name = category_name,
                     )
-                ddb_category.boardgames.add(ddb_boardgame)
+                ddb_boardgame.categories.add(ddb_category)
 
         # Create mechanic objects if they don't already exist, otherwise
         # just link them
@@ -70,7 +70,7 @@ class BoardGameManager(models.Manager):
                     ddb_family = BoardGameFamily.objects.create(
                         name = family_name,
                     )
-                ddb_family.boardgames.add(ddb_boardgame)
+                ddb_boardgame.families.add(ddb_family)
 
         for bgg_rank in bgg_game.ranks:
             print("Creating bgg_rank of name " + bgg_rank.name)
@@ -81,6 +81,24 @@ class BoardGameManager(models.Manager):
             )
 
         return ddb_boardgame
+
+class BoardGameCategory(models.Model):
+    name = models.CharField(max_length=50, primary_key=True)
+
+    def __str__(self):
+        return self.name
+
+class BoardGameMechanic(models.Model):
+    name = models.CharField(max_length=50, primary_key=True)
+
+    def __str__(self):
+        return self.name
+
+class BoardGameFamily(models.Model):
+    name = models.CharField(max_length=50, primary_key=True)
+
+    def __str__(self):
+        return self.name
 
 # Create your models here.
 class BoardGame(models.Model):
@@ -97,40 +115,20 @@ class BoardGame(models.Model):
     play_time = models.IntegerField()
     min_play_time = models.IntegerField()
     max_play_time = models.IntegerField()
-    boardgame_category = models.ManyToManyField('BoardGameCategory')
-    boardgame_mechanic = models.ManyToManyField('BoardGameMechanic')
-    boardgame_family = models.ManyToManyField('BoardGameFamily')
 
     is_expansion = models.BooleanField(default=False)
+
+    categories = models.ManyToManyField(BoardGameCategory)
+    mechanics = models.ManyToManyField(BoardGameMechanic)
+    families = models.ManyToManyField(BoardGameFamily)
 
     objects = BoardGameManager()
 
     def __str__(self):
         return self.name
 
-class BoardGameCategory(models.Model):
-    boardgames = models.ManyToManyField(BoardGame)
-    name = models.CharField(max_length=50, primary_key=True)
-
-    def __str__(self):
-        return self.name
-
-class BoardGameMechanic(models.Model):
-    boardgames = models.ManyToManyField(BoardGame)
-    name = models.CharField(max_length=50, primary_key=True)
-
-    def __str__(self):
-        return self.name
-
-class BoardGameFamily(models.Model):
-    boardgames = models.ManyToManyField(BoardGame)
-    name = models.CharField(max_length=50, primary_key=True)
-
-    def __str__(self):
-        return self.name
-
 class BoardGameStatistics(models.Model):
-    boardgame = models.OneToOneField(BoardGame, on_delete=models.CASCADE)
+    boardgame = models.OneToOneField(BoardGame, on_delete=models.CASCADE, related_name='statistics')
     num_ratings = models.IntegerField()
     avg_rating = models.FloatField(null=True)
     bayesian_avg_rating = models.FloatField(null=True)
@@ -138,7 +136,7 @@ class BoardGameStatistics(models.Model):
 
 # TODO handle ranks
 class BoardGameRank(models.Model):
-    bg_stats = models.ForeignKey(BoardGameStatistics, on_delete=models.CASCADE)
+    bg_stats = models.ForeignKey(BoardGameStatistics, on_delete=models.CASCADE, related_name='sub_ranks')
     subtype = models.CharField(max_length=60)
     rank = models.IntegerField(null=True)
 
@@ -148,7 +146,7 @@ class Collection(models.Model):
     # boardgames = models.ForeignKey(CollectionBoardGame)
 
 class CollectionBoardGame(models.Model):
-    collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
+    collection = models.ForeignKey(Collection, on_delete=models.CASCADE, related_name='boardgames')
     boardgame = models.ForeignKey(BoardGame, on_delete=models.CASCADE)
     # name = models.TextField()
     num_plays = models.IntegerField()
