@@ -4,12 +4,19 @@
 {% load crispy_forms_tags %}
 
 {% block custom_css %}
+    <!-- Bootstrap Select -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+
+    <!-- Main.css -->
     <link href="{% static "MainApp/css/main.css" %}" rel="stylesheet">
 {% endblock %}
 
 {% block navbar_links %}
     <li class="nav-item">
         <a class="nav-link" data-toggle="modal" data-target="#link_bgg_modal">Link BGG Account</a>
+    </li>
+    <li class="nav-item">
+        <a id="filter-toggle-btn" class="nav-link">Filter Panel</a>
     </li>
 {% endblock %}
 
@@ -45,9 +52,42 @@
     </div>
 </div>
 
-<div id="collection-div" class="d-flex flex-wrap">
-    <div class="bg-container" v-for="bg_item in no_expansions" :key="bg_item.boardgame.bgg_id">
-        <div class="card h-100">
+<!-- FILTER PANEL -->
+
+<div id="filter-panel-div" class="wrapper-div">
+    <div id="filter-wrapper-div" class="form-row mt-4 mb-3">
+        <div class="filter-item col-auto">
+            <label class="form-check-label" for="filter-show-expansions">Show Expansions?</label>
+            <input type="checkbox" id="filter-show-expansions" v-model="filter.showExpansions">
+        </div>
+        <div class="filter-item col-auto">
+            <!-- <label class="" for="filter-mechanics">Select Mechanics:</label> -->
+            <select id="filter-mechanics" title="Boardgame Mechanic" multiple data-live-search="true" v-model="filter.mechanics" >
+                <option v-for="mechanic in metadata.mechanics" :key="mechanic">[[mechanic]]</option>
+            </select>
+        </div>
+        <div class="filter-item col-2">
+            <label class="" for="filter-mechanics">Num Players:</label>
+            <input type="number" class="form-control" id="num-player-input" v-model="filter.numPlayers" min="0">
+        </div>
+        <div class="filter-item col-auto">
+            <label class="" for="filter-mechanics">Num Players:</label>
+            <input type="text" class="form-control" id="num-player-input" v-model="filter.searchText" placeholder="Search titles...">
+        </div>
+    </div>
+    <div id="selected-mechanics" class="d-flex flex-wrap">
+        <div class="mechanic-item" v-for="mechanic in filter.mechanics" :key="mechanic">
+            [[mechanic]]
+            <button type="button" class="close" v-on:click="removeMechanicFilter" aria-label="Close" :mechanic_id=[[mechanic]]>
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="collection-div" class="d-flex flex-wrap wrapper-div pt-4">
+    <div class="bg-container" v-for="bg_item in filteredCollection" :key="bg_item.boardgame.bgg_id">
+        <div class="card h-100 bg-card">
             <div class="square-image-div-wrapper">
                 <div class="square-image-div" v-bind:style="{ 'background-image': 'url(' + bg_item.boardgame.image_link + ')' }">
                     <!-- <img class="card-img-top boardgame-image" :src=bg_item.boardgame.image_link alt="Card image cap"> -->
@@ -66,55 +106,16 @@
 
 
 {% block custom_js %}
+    <!-- Bootstrap Select -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+    <!-- GreenSock Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+
+    <!-- Undersore.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+
+    <!-- Main.js -->
     <script src="{% static "MainApp/scripts/main.js" %}" %}"></script>
 {% endblock %}
 
-
-
-<div class="container">
-    <h5>Bootstrap 4 Equal Height Cards using Grid</h5>
-    <div class="row">
-        <div class="col-sm-4 py-2">
-            <div class="card card-body h-100">
-                Card. I'm just a simple card-block.
-            </div>
-        </div>
-        <div class="col-sm-4 py-2">
-            <div class="card h-100 text-white bg-danger">
-                <div class="card-body">
-                    <h3 class="card-title">Danger</h3>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-outline-light">Outline</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4 py-2">
-            <div class="card h-100 card-body">
-                Card. I'm just a simple card-block, but I have a little more text!
-            </div>
-        </div>
-        <div class="col-sm-4 py-2">
-            <div class="card h-100 border-primary">
-                <div class="card-body">
-                    <h3 class="card-title">Primary</h3>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-outline-secondary">Outline</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4 py-2">
-            <div class="card h-100 card-body">
-                Card. I'm just a simple card-block.
-            </div>
-        </div>
-        <div class="col-sm-4 py-2">
-            <div class="card text-white bg-primary">
-                <div class="card-body">
-                    <h3 class="card-title">Hello</h3>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-outline-light">Outline</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>

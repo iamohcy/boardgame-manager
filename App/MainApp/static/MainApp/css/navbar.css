@@ -1,5 +1,4 @@
 body {
-    padding-top: 5rem;
 }
 
 /* NAVBAR */
@@ -14,4 +13,8 @@ body {
     padding-left: 10px;
     padding-top: 3px;
     padding:right: 10px;
+}
+
+.nav-link {
+    cursor: pointer;
 }

@@ -29,7 +29,6 @@ $(function() {
 
     $('[data-toggle="popover"]').on('click', function(e) {
         e.stopPropagation()
-
         if ($($('[data-toggle="popover"]').data('bs.popover').getTipElement()).hasClass('in')) {
             $('[data-toggle="popover"]').popover('hide')
             $(document).off('click.app.popover')
@@ -45,72 +44,153 @@ $(function() {
         }
     })
 
-    // // Config Options
-    // var slideout = new Slideout({
-    //   'panel': document.getElementById('main'),
-    //   'menu': document.getElementById('navbar-main'),
-    //   'padding': 256,
-    //   'tolerance': 70
-    // });
+    // Set body padding to height of navbar
+    $("body").css("padding-top", $("#app-navbar").height() + "px");
 
-    // // Default Open
-    // slideout.open();
+    var filterShowing = false;
+    var FILTER_SHOW_TIME = 0.5;
+    var computedHeight = 0;
+    $("#filter-toggle-btn").click(function() {
+        if (window.metadataLoaded) {
+            if (!filterShowing) {
+                $("#filter-panel-div").css("display", "block");
 
-    // // Toggle button
-    // document.querySelector('.toggle-button').addEventListener('click', function() {
-    //   slideout.toggle();
-    //   if(slideout.isOpen()){
-    //     alert("You Opened!");
-    //   }else{
-    //     alert("You Closed!");
-    //   }
-    // });
+                // Hack to get the computed height of the element so we know what to tween to
+                $("#filter-panel-div").css("max-height", "100%");
+                computedHeight = $("#filter-panel-div").height();
+                $("#filter-panel-div").css("max-height", "0px");
 
+                TweenLite.to("#filter-panel-div", FILTER_SHOW_TIME, {
+                    "max-height": computedHeight+"px",
+                    onComplete:function() {
+                        $(this.target).css("max-height", "max-content");
+                        filterShowing = true;
+                        $(this.target).css("overflow", "visible");
+                    },
+                });
+            }
+            else {
+                $("#filter-panel-div").css("max-height", computedHeight+"px");
+                $("#filter-panel-div").css("overflow", "hidden");
+                TweenLite.to("#filter-panel-div", FILTER_SHOW_TIME, {"max-height":"0px", onComplete:function() {
+                    filterShowing = false;
+                    // console.log(this.target);
+                    $(this.target).css("display", "none");
+                }});
+            }
+        }
+    })
 })
 
-console.log("HELLO!");
 
 var collectionArea = new Vue({
     delimiters: ['[[', ']]'],
-    el: '#collection-div',
+    el: '#main',
     data() {
         return {
-            collection: null
+            collection: null,
+            metadata: {
+                mechanics: null,
+            },
+            filter: {
+                showExpansions: false,
+                mechanics: [],
+                numPlayers: null,
+                searchText: "",
+            }
         }
     },
+    // Filter params
+    // min/max players
+    // duration
+    // mechanics
     computed: {
-
-// Filter params
-// min/max players
-// duration
-// mechanics
-
-        no_expansions: function() {
+        filteredCollection: function() {
+            window.filter = this.filter;
+            var self = this;
             if (this.collection) {
-                return this.collection.boardgames.filter(function(bg_item) {
-                    return !bg_item.boardgame.is_expansion
-                })
+                var filtered = this.collection.boardgames;
+                if (this.filter.searchText) {
+                    filtered = filtered.filter(bg_item => {
+                        return bg_item.boardgame.name.toLowerCase().includes(this.filter.searchText.toLowerCase())
+                    });
+                }
+                if (!this.filter.showExpansions) {
+                    filtered = filtered.filter(bg_item => !bg_item.boardgame.is_expansion);
+                }
+                if (this.filter.mechanics.length > 0) {
+                    filtered = filtered.filter(function(bg_item) {
+                        // OR
+                        // Return true if an item in the boardgames list of mechanics is also in the filter list
+                        // return bg_item.boardgame.mechanics.some(m => self.filter.mechanics.indexOf(m) >= 0);
+
+                        // AND
+                        found = _.map(self.filter.mechanics, (m => bg_item.boardgame.mechanics.indexOf(m) >= 0));
+                        // found = _.map(bg_item.boardgame.mechanics, (m => self.filter.mechanics.indexOf(m.name) >= 0));
+                        allFound = found.indexOf(false) < 0;
+                        return allFound;
+                    })
+                }
+                if (this.filter.numPlayers) {
+                    filtered = filtered.filter(function(bg_item) {
+                        return this.filter.numPlayers >= bg_item.boardgame.min_players &&
+                               this.filter.numPlayers <= bg_item.boardgame.max_players;
+                    })
+                }
+                return filtered;
             }
             else {
                 return null;
             }
         },
-        expansions: function() {
-            if (this.collection) {
-                return this.collection.boardgames.filter(function(bg_item) {
-                    return bg_item.boardgame.is_expansion
-                })
-            }
-            else {
-                return null;
-            }
-        }
     },
     mounted() {
         var self = this;
         axios
             .get('user_collection')
-            .then(response => (this.collection = response.data))
+            .then(response => {
+                self.collection = response.data;
+                window.collection = self.collection
+                self.collection.boardgames.sort((a, b) => a.boardgame.name.localeCompare(b.boardgame.name));
+
+                // Flatten list of mechanic objects into mechanics
+                for (var i = 0; i < self.collection.boardgames.length; i++) {
+                    var bg = self.collection.boardgames[i].boardgame
+                    bg.mechanics = _.map(bg.mechanics, (m => m.name));
+                }
+                // self.collection.boardgames = _.invoke(self.collection.boardgames, (bg =>
+                //     bg.boardgame.mechanics = _.map(bg.boardgame.mechanics, (m => m.name)))
+                // );
+
+                // function flattenMechanics (bg) {
+                //     console.log(bg);
+                //     bg.boardgame.mechanics = _.map(bg.boardgame.mechanics, (m => m.name));
+                // }
+                // var testest = _.invoke(self.collection.boardgames, 'flattenMechanics');
+            });
+
+        axios
+            .get('boardgame_metadata')
+            // .then(response => (this.metadata = response.data));
+            .then(function(response) {
+                self.metadata.mechanics = response.data.mechanics.map(mechanic => mechanic.name);
+                self.metadata.mechanics.sort((a, b) => a.localeCompare(b));
+                self.$nextTick(() => {
+                    window.metadataLoaded = true;
+                    $('#filter-mechanics').selectpicker({
+                        liveSearch: true,
+                        selectedTextFormat: 'static',
+                        noneSelectedText: '',
+                    });
+                });
+            });
+    },
+    methods: {
+        removeMechanicFilter: function (event) {
+            var mechanicStr = $(event.target).parent().attr("mechanic_id");
+            // console.log("Removing " + mechanicStr);
+            this.filter.mechanics.splice(this.filter.mechanics.indexOf(mechanicStr), 1);
+        }
     }
 })
 

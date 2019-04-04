@@ -59,45 +59,67 @@
     background-position: center top;
 }
 
+.bg-container {
+    padding: 5px;
+}
+
 .fill {
     overflow: hidden;
     background-size: cover;
     background-position: center;
 }
 
+.bg-card > .card-body {
+    padding: 0.75rem;
+}
+
+.bg-card .card-title {
+    margin-bottom: 0px;
+    font-size: 1.2rem;
+}
 
 
 /*  background-image: url('http://i.stack.imgur.com/GA6bB.png');
   background-size:cover;
   background-repeat:no-repeat;*/
 
-#collection-div {
+.wrapper-div {
     margin-left: auto;
     margin-right: auto;
-    margin-top: 20px;
+    padding-left:2em;
+    padding-right:2em;
 }
 
 @media (min-width: 768px) {
-    #collection-div {
+    .wrapper-div {
         width: 100%;
     }
 }
 
 @media (min-width: 992px) {
-    #collection-div {
+    .wrapper-div {
         width: 90%;
     }
 }
 
 @media (min-width: 1500px) {
-    #collection-div {
+    .wrapper-div {
         width: 80%;
     }
 }
 
 @media (min-width: 1800px) {
-    #collection-div {
+    .wrapper-div {
         width: 60%;
+    }
+}
+
+@media (min-width: 0px) {
+    .bg-container {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 50% !important;
+        flex: 0 0 100% !important;
+        max-width: 100%;
     }
 }
 
@@ -137,56 +159,45 @@
     }
 }
 
-/* Other aspect ratios to try:
- * 56.25% = 16:9
- * 75% = 4:3
- * 66.66% = 3:2
- * 62.5% = 8:5
- */
-
-
-
-/* SLIDEOUT PANEL */
-
-body {
-  width: 100%;
-  height: 100%;
+/* FILTER PANEL */
+#filter-panel-div {
+    max-height: 0px;
+    overflow: hidden;
+    display: none;
 }
 
-.slideout-menu {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  width: 256px;
-  min-height: 100vh;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-  z-index: 0;
-  display: none;
+#filter-wrapper-div label {
+    margin-bottom: 0px;
+    margin-right: 8px;
+    flex: 0 0 auto;
 }
 
-.slideout-menu-left {
-  left: 0;
+.filter-item {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    margin-right: 1rem;
 }
 
-.slideout-menu-right {
-  right: 0;
+#selected-mechanics {
+    background: white;
+    padding: 20px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    border-top: none;
+    border-bottom: 1px solid #DDD;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
 }
 
-.slideout-panel {
-  position: relative;
-  z-index: 1;
-  will-change: transform;
-  background-color: #FFF; /* A background-color is required */
-  min-height: 100vh;
+.mechanic-item {
+    border-radius: 3px;
+    background: #EDECFD;
+    margin-right: 5px;
+    padding: 5px 10px;
 }
 
-.slideout-open,
-.slideout-open body,
-.slideout-open .slideout-panel {
-  overflow: hidden;
+.mechanic-item > button {
+    font-size: 1.7rem;
+    margin-left: 0.2em;
 }
 
-.slideout-open .slideout-menu {
-  display: block;
-}
