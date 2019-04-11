@@ -24,7 +24,7 @@ SECRET_KEY = 'r4i3e76wvz_vmvi6vc8y(7q2t)q%4^s&#kfih&m84f_4=af6w&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['dicedicebaby.ap-southeast-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['dicedicebaby.ap-southeast-1.elasticbeanstalk.com', '127.0.0.1']
 
 # Application definition
 
@@ -146,7 +146,13 @@ DATE_FORMAT = 'j M Y'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, "..", "www", "static")
+
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "www"),
+]
 
 # App Settings
 
