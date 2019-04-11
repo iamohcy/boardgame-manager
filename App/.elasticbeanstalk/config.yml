@@ -1,0 +1,18 @@
+branch-defaults:
+  default:
+    environment: DiceDiceBaby-dev
+    group_suffix: null
+global:
+  application_name: Dice Dice Baby
+  branch: null
+  default_ec2_keyname: dicedice-baby
+  default_platform: Python 3.6
+  default_region: ap-southeast-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: eb-cli
+  repository: null
+  sc: null
+  workspace_type: Application
