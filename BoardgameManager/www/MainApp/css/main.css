@@ -205,6 +205,10 @@
     margin-bottom: 0.6rem;
 }
 
+.filter-item > .bootstrap-select {
+    width: 100% !important;
+}
+
 #selected-mechanics {
     background: white;
     padding: 20px;

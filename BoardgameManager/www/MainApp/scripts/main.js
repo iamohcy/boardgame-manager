@@ -195,7 +195,6 @@ var collectionArea = new Vue({
         var self = this;
 
         var username = window.username;
-        console.log('/user_collection/' + username);
         axios
             .get('/user_collection/' + username)
             .then(response => {
@@ -223,7 +222,7 @@ var collectionArea = new Vue({
             });
 
         axios
-            .get('boardgame_metadata')
+            .get('/boardgame_metadata')
             // .then(response => (this.metadata = response.data));
             .then(function(response) {
                 self.metadata.mechanics = response.data.mechanics.map(mechanic => mechanic.name);
