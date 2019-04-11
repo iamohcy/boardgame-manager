@@ -12,9 +12,11 @@
 {% endblock %}
 
 {% block navbar_links %}
+    {% if is_own_collection %}
     <li class="nav-item">
         <a class="nav-link" data-toggle="modal" data-target="#link_bgg_modal">Link BGG Account</a>
     </li>
+    {% endif %}
     <li class="nav-item">
         <a id="filter-toggle-btn" class="nav-link">Filter Panel</a>
     </li>
@@ -22,6 +24,7 @@
 
 {% block content %}
 
+{% if is_own_collection %}
 <!-- Modal -->
 <div class="modal fade" id="link_bgg_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -51,11 +54,11 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 <!-- FILTER PANEL -->
-
 <div id="filter-panel-div" class="wrapper-div">
-    <div id="filter-wrapper-div" class="form-row mt-4 mb-3">
+    <div id="filter-wrapper-div" class="form-row mt-4 mb-2">
         <div class="filter-item col-auto">
             <label class="form-check-label" for="filter-show-expansions">Show Expansions?</label>
             <input type="checkbox" id="filter-show-expansions" v-model="filter.showExpansions">
@@ -66,13 +69,28 @@
                 <option v-for="mechanic in metadata.mechanics" :key="mechanic">[[mechanic]]</option>
             </select>
         </div>
-        <div class="filter-item col-2">
+        <div class="filter-item col-3">
             <label class="" for="filter-mechanics">Num Players:</label>
-            <input type="number" class="form-control" id="num-player-input" v-model="filter.numPlayers" min="0">
+            <input type="number" class="form-control" id="num-player-input" v-model="filter.numPlayers" min="1">
         </div>
         <div class="filter-item col-auto">
-            <label class="" for="filter-mechanics">Num Players:</label>
             <input type="text" class="form-control" id="num-player-input" v-model="filter.searchText" placeholder="Search titles...">
+        </div>
+        <div class="filter-item col-5">
+            <label class="" for="filter-sort">Sort By:</label>
+            <select id="filter-sort" class="selectpicker" title="Sort By" v-model="filter.sortBy" >
+                <option selected>Alphabetical</option>
+                <option>BGG Rating</option>
+                <option>User Rating</option>
+                <option>Num Plays</option>
+                <option>Min Players</option>
+                <option>Max Players</option>
+                <option>Complexity</option>
+            </select>
+            <select id="filter-sort-order" class="selectpicker" title="" v-model="filter.sortByOrder" >
+                <option selected>Desc</option>
+                <option>Asc</option>
+            </select>
         </div>
     </div>
     <div id="selected-mechanics" class="d-flex flex-wrap">
@@ -85,11 +103,15 @@
     </div>
 </div>
 
+<!-- COLLECTION AREA -->
 <div id="collection-div" class="d-flex flex-wrap wrapper-div pt-4">
-    <div class="bg-container" v-for="bg_item in filteredCollection" :key="bg_item.boardgame.bgg_id">
+    <div class="bg-container" v-for="bg_item in filteredAndSortedCollection" :key="bg_item.boardgame.bgg_id">
         <div class="card h-100 bg-card">
             <div class="square-image-div-wrapper">
-                <div class="square-image-div" v-bind:style="{ 'background-image': 'url(' + bg_item.boardgame.image_link + ')' }">
+                <div class="square-image-div"
+                    v-bind:style="{ 'background-image': 'url(' + bg_item.boardgame.image_link + ')' }"
+                    v-tooltip:right="bg_item.boardgame.name"
+                    v-bind:bgg_id="bg_item.boardgame.bgg_id">
                     <!-- <img class="card-img-top boardgame-image" :src=bg_item.boardgame.image_link alt="Card image cap"> -->
                 </div>
             </div>
@@ -102,10 +124,53 @@
     </div>
 </div>
 
+<!-- POPOVER INFORMATION -->
+<div v-for="bg_item in filteredAndSortedCollection" class='bg-popover hide' v-bind:title="bg_item.boardgame.name" v-bind:id='bg_item.boardgame.bgg_id + "_popover"'>
+    <table class="table mb-0">
+        <tbody>
+            <tr>
+                <th scope="row">Num Players:</th>
+                <td v-if="bg_item.boardgame.min_players !== bg_item.boardgame.max_players">
+                    [[bg_item.boardgame.min_players]] to [[bg_item.boardgame.max_players]]
+                </td>
+                <td v-else>
+                    [[bg_item.boardgame.min_players]]
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Play Time:</th>
+                <td>[[bg_item.boardgame.play_time]]</td>
+            </tr>
+            <tr>
+                <th scope="row">BGG Rating:</th>
+                <td>[[bg_item.boardgame.statistics.avg_rating_2dp]]</td>
+            </tr>
+            <tr>
+                <th scope="row">Complexity:</th>
+                <td>[[bg_item.boardgame.statistics.avg_weight_2dp]]</td>
+            </tr>
+            <tr>
+                <th scope="row">Num Plays:</th>
+                <td>[[bg_item.num_plays]]</td>
+            </tr>
+            <tr>
+                <th scope="row">Personal Rating:</th>
+                <td v-if="bg_item.rating">[[bg_item.rating]]</td>
+                <td v-else="bg_item.rating">Nil</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 {% endblock %}
 
 
 {% block custom_js %}
+
+    <script>
+        window.username = "{{username}}";
+    </script>
+
     <!-- Bootstrap Select -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 

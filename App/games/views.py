@@ -15,6 +15,7 @@ from users.forms import LinkBggForm
 from .serializers import CollectionSerializer, BoardGameMechanicSerializer
 
 # Models
+from django.contrib.auth.models import User
 from .models import BoardGame, BoardGameCategory, BoardGameMechanic, \
                          BoardGameStatistics, BoardGameFamily, BoardGameRank, Collection
         # log.info("boardgame id      : {}".format(self.id))
@@ -152,7 +153,7 @@ def link_bgg(request):
                 list_of_games = getCollection(request, form.cleaned_data['bgg_username'])
                 response = JsonResponse({'bgg_username': form.cleaned_data['bgg_username'],
                                          'games': list_of_games})
-                return JsonResponse(response)
+                return response
 
             except BGGItemNotFoundError:
                 return JsonResponse({'Error': 'User not found!'})
@@ -164,7 +165,7 @@ def link_bgg(request):
     else:
         return HttpResponse("Invalid non POST call to link_bgg!")
 
-@login_required
+# @login_required
 def get_user_collection(request):
     if request.method == 'GET': # If the form has been submitted...
         user_collection = request.user.collection
@@ -177,7 +178,7 @@ def get_user_collection(request):
     else:
         return HttpResponse("Invalid non GET call to get_user_collection!")
 
-@login_required
+# @login_required
 def get_boardgame_metadata(request):
     if request.method == 'GET': # If the form has been submitted...
         mechanics = BoardGameMechanic.objects.all()
@@ -190,3 +191,17 @@ def get_boardgame_metadata(request):
         # return response
     else:
         return HttpResponse("Invalid non GET call to get_boardgame_metadata!")
+
+# @login_required
+def get_user_collection(request, username):
+    if request.method == 'GET':
+        user = User.objects.get(username=username)
+        user_collection = user.collection
+        serializer = CollectionSerializer(user_collection)
+        json_str = JSONRenderer().render(serializer.data)
+
+        return HttpResponse(json_str, content_type='application/json')
+        # return redirect('/')
+        # return response
+    else:
+        return HttpResponse("Invalid non GET call to get_user_collection!")

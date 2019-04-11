@@ -3,7 +3,9 @@
 }
 */
 
+/*********************************************************************************/
 /* LINK BGG FORM */
+/*********************************************************************************/
 
 #bgg-input {
     width: 400px;
@@ -18,13 +20,9 @@
     margin-left: 15px;
 }
 
-/*html {
-   background: url(images/bg.jpg) no-repeat center center fixed;
-   -webkit-background-size: cover;
-   -moz-background-size: cover;
-   -o-background-size: cover;
-   background-size: cover;
-}*/
+/*********************************************************************************/
+/* COLLECTION */
+/*********************************************************************************/
 
 /*  Thumbnail images */
 /*  This seems a bit ridiculous, but what we're trying to do here is using a
@@ -77,11 +75,6 @@
     margin-bottom: 0px;
     font-size: 1.2rem;
 }
-
-
-/*  background-image: url('http://i.stack.imgur.com/GA6bB.png');
-  background-size:cover;
-  background-repeat:no-repeat;*/
 
 .wrapper-div {
     margin-left: auto;
@@ -159,7 +152,39 @@
     }
 }
 
+/*********************************************************************************/
+/* POPOVER */
+/*********************************************************************************/
+
+/* Remove the top border when a table is missing the header */
+.table > tbody > tr:first-child > td {
+    border: none;
+}
+
+.table > tbody > tr:first-child > th {
+    border: none;
+}
+
+.popover {
+    -webkit-box-shadow: 3px 4px 15px 3px rgba(0,0,0,0.22);
+    -moz-box-shadow: 3px 4px 15px 3px rgba(0,0,0,0.22);
+    box-shadow: 3px 4px 15px 3px rgba(0,0,0,0.22);
+}
+
+.popover-body {
+    padding: 0px;
+}
+
+.popover-header {
+    background-color: #498fcc;
+    color: #ffffff;
+    font-weight: normal;
+}
+
+/*********************************************************************************/
 /* FILTER PANEL */
+/*********************************************************************************/
+
 #filter-panel-div {
     max-height: 0px;
     overflow: hidden;
@@ -177,6 +202,7 @@
     align-items: center;
     align-content: center;
     margin-right: 1rem;
+    margin-bottom: 0.6rem;
 }
 
 #selected-mechanics {

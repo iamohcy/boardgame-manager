@@ -24,22 +24,20 @@ SECRET_KEY = 'r4i3e76wvz_vmvi6vc8y(7q2t)q%4^s&#kfih&m84f_4=af6w&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['dicedicebaby.ap-southeast-1.elasticbeanstalk.com']
 
 # Application definition
 
 INSTALLED_APPS = [
-    # External apps
-    'crispy_forms',
-    'widget_tweaks',
-    'rest_framework',
-
     # Project apps
     'MainApp',
     'users',
     'games',
 
     # External apps
+    'crispy_forms',
+    'widget_tweaks',
+    'rest_framework',
     'registration', #should be immediately above 'django.contrib.admin'
 
     # Django apps
@@ -49,7 +47,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
 ]
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -155,7 +152,14 @@ STATIC_URL = '/static/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+ACTIVATION_EMAIL_SUBJECT = 'registration/activation_email_subject.txt'
+
+ACTIVATION_EMAIL_BODY = 'registration/activation_email.txt'
+
+ACTIVATION_EMAIL_HTML = 'registration/activation_email.html'
+
 ACCOUNT_ACTIVATION_DAYS = 7
+
 REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
 
 DATE_INPUT_FORMATS = ['%d/%m/%Y', ]
@@ -168,3 +172,4 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [],
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
+

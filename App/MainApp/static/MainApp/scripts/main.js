@@ -82,6 +82,22 @@ $(function() {
     })
 })
 
+Vue.directive('tooltip', function(el, binding){
+    $(el).popover({
+        html: true,
+        // title: binding.value,
+        title: "Information",
+        placement: binding.arg,
+        trigger: 'hover',
+        content: function() {
+            var bgg_id = $(this).attr("bgg_id");
+            return $('#' + bgg_id + "_popover").html();
+        },
+    });
+})
+
+// Must remember to hide the original divs for the pop ups after initializing them
+$(".bg-popover").css("display", "none");
 
 var collectionArea = new Vue({
     delimiters: ['[[', ']]'],
@@ -97,6 +113,8 @@ var collectionArea = new Vue({
                 mechanics: [],
                 numPlayers: null,
                 searchText: "",
+                sortBy: "Alphabetical",
+                sortByOrder: "Asc",
             }
         }
     },
@@ -105,7 +123,7 @@ var collectionArea = new Vue({
     // duration
     // mechanics
     computed: {
-        filteredCollection: function() {
+        filteredAndSortedCollection: function() {
             window.filter = this.filter;
             var self = this;
             if (this.collection) {
@@ -137,7 +155,36 @@ var collectionArea = new Vue({
                                this.filter.numPlayers <= bg_item.boardgame.max_players;
                     })
                 }
-                return filtered;
+
+                var sorted = filtered;
+                if (this.filter.sortBy) {
+                    if (this.filter.sortBy === "Alphabetical") {
+                        sorted = sorted.sort((a, b) => a.boardgame.name.localeCompare(b.boardgame.name));
+                    }
+                    else if (this.filter.sortBy === "BGG Rating") {
+                        sorted = sorted.sort((a, b) => a.boardgame.statistics.avg_rating - b.boardgame.statistics.avg_rating);
+                    }
+                    else if (this.filter.sortBy === "User Rating") {
+                        sorted = sorted.sort((a, b) => a.rating - b.rating);
+                    }
+                    else if (this.filter.sortBy === "Num Plays") {
+                        sorted = sorted.sort((a, b) => a.num_plays - b.num_plays);
+                    }
+                    else if (this.filter.sortBy === "Min Players") {
+                        sorted = sorted.sort((a, b) => a.boardgame.min_players - b.boardgame.min_players);
+                    }
+                    else if (this.filter.sortBy === "Max Players") {
+                        sorted = sorted.sort((a, b) => a.boardgame.max_players - b.boardgame.max_players);
+                    }
+                    else if (this.filter.sortBy === "Complexity") {
+                        sorted = sorted.sort((a, b) => a.boardgame.statistics.avg_weight - b.boardgame.statistics.avg_weight);
+                    }
+                }
+                if (this.filter.sortByOrder === "Desc") {
+                    sorted.reverse();
+                }
+
+                return sorted;
             }
             else {
                 return null;
@@ -146,17 +193,23 @@ var collectionArea = new Vue({
     },
     mounted() {
         var self = this;
+
+        var username = window.username;
+        console.log('/user_collection/' + username);
         axios
-            .get('user_collection')
+            .get('/user_collection/' + username)
             .then(response => {
                 self.collection = response.data;
                 window.collection = self.collection
                 self.collection.boardgames.sort((a, b) => a.boardgame.name.localeCompare(b.boardgame.name));
 
-                // Flatten list of mechanic objects into mechanics
                 for (var i = 0; i < self.collection.boardgames.length; i++) {
                     var bg = self.collection.boardgames[i].boardgame
+                    // Flatten list of mechanic objects into mechanics
                     bg.mechanics = _.map(bg.mechanics, (m => m.name));
+                    // Set avg_rating/avg_weight display as avg_rating to two decimal places
+                    bg.statistics.avg_rating_2dp = bg.statistics.avg_rating.toFixed(2);
+                    bg.statistics.avg_weight_2dp = bg.statistics.avg_weight.toFixed(2);
                 }
                 // self.collection.boardgames = _.invoke(self.collection.boardgames, (bg =>
                 //     bg.boardgame.mechanics = _.map(bg.boardgame.mechanics, (m => m.name)))

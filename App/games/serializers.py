@@ -37,7 +37,7 @@ class BoardGameStatisticsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BoardGameStatistics
-        fields = ['num_ratings', 'avg_rating', 'bayesian_avg_rating', 'rank', 'sub_ranks']
+        fields = ['num_ratings', 'avg_rating', 'bayesian_avg_rating', 'avg_weight', 'rank', 'sub_ranks']
 
 
 class BoardGameSerializer(serializers.ModelSerializer):

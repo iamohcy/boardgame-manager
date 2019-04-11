@@ -29,6 +29,7 @@ class BoardGameManager(models.Manager):
             boardgame = ddb_boardgame,
             num_ratings = bgg_game.users_rated,
             avg_rating = bgg_game.rating_average,
+            avg_weight = bgg_game.stats["averageweight"],
             bayesian_avg_rating = bgg_game.rating_bayes_average,
             rank = bgg_game.bgg_rank,
         )
@@ -131,6 +132,7 @@ class BoardGameStatistics(models.Model):
     boardgame = models.OneToOneField(BoardGame, on_delete=models.CASCADE, related_name='statistics')
     num_ratings = models.IntegerField()
     avg_rating = models.FloatField(null=True)
+    avg_weight = models.FloatField(null=True)
     bayesian_avg_rating = models.FloatField(null=True)
     rank = models.IntegerField(null=True)
 
