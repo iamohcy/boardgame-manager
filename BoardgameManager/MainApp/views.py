@@ -46,7 +46,7 @@ def index(request):
         # user_collection = request.user.collection.boardgames.all()
         # filtered_user_collection = user_collection.filter(boardgame__is_expansion=False).order_by('boardgame__name')
         # context = {'link_bgg_form': link_bgg_form, 'user_collection': filtered_user_collection}
-        context = {'link_bgg_form': link_bgg_form, 'username':request.user.username}
+        context = {'link_bgg_form': link_bgg_form, 'username':request.user.username, 'is_own_collection':True}
         return render(request, 'MainApp/main.html', context)
     else:
         context={}
