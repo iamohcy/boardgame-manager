@@ -24,6 +24,16 @@
 /* CURATED COLLECTION */
 /*********************************************************************************/
 
+#curated-collection-modal .modal-body{
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+}
+
+.curated-wrapper-div {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #curated-collection-modal > .modal-dialog {
     margin-left: auto;
     margin-right: auto;
@@ -159,7 +169,7 @@
     font-size: 1.2rem;
 }
 
-.wrapper-div, .curated-wrapper-div {
+.wrapper-div {
     margin-left: auto;
     margin-right: auto;
     padding-left:2em;

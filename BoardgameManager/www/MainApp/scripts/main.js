@@ -202,6 +202,12 @@ var collectionArea = new Vue({
                 var filtered = this.collection.boardgames;
                 filtered = filtered.filter(bg_item => !bg_item.boardgame.is_expansion);
 
+                var MIN_CURATED_RATING = 6.75;
+                // Filter out games with BGG rating less than 6.75
+                filtered = filtered.filter(function(bg_item) {
+                    return bg_item.boardgame.statistics.avg_rating >= MIN_CURATED_RATING;
+                })
+
                 if (this.gamePicker.numPlayers > 0) {
                     filtered = filtered.filter(function(bg_item) {
                         var recommended = bg_item.boardgame.player_suggestions.recommended;
