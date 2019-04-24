@@ -113,9 +113,14 @@ var collectionArea = new Vue({
                 mechanics: [],
                 numPlayers: null,
                 searchText: "",
-                sortBy: "Alphabetical",
-                sortByOrder: "Asc",
-            }
+                sortBy: "BGG Rating",
+                sortByOrder: "Desc",
+            },
+            gamePicker: {
+                numPlayers: 0,
+                coop: "both",
+                weights: ["light", "medium", "heavy"],
+            },
         }
     },
     // Filter params
@@ -190,6 +195,68 @@ var collectionArea = new Vue({
                 return null;
             }
         },
+        curatedCollection: function() {
+            window.gamePicker = this.gamePicker;
+            var self = this;
+            if (this.collection) {
+                var filtered = this.collection.boardgames;
+                filtered = filtered.filter(bg_item => !bg_item.boardgame.is_expansion);
+
+                if (this.gamePicker.numPlayers > 0) {
+                    filtered = filtered.filter(function(bg_item) {
+                        var recommended = bg_item.boardgame.player_suggestions.recommended;
+                        return recommended.indexOf(this.gamePicker.numPlayers) != -1;
+                    })
+                }
+
+                if (this.gamePicker.coop != "both") {
+                    if (this.gamePicker.coop == "vs") {
+                        filtered = filtered.filter(function(bg_item) {
+                            return bg_item.boardgame.mechanics.indexOf("Cooperative Play") == -1;
+                        })
+                    }
+                    else {
+                        filtered = filtered.filter(function(bg_item) {
+                            return bg_item.boardgame.mechanics.indexOf("Cooperative Play") != -1;
+                        })
+                    }
+                }
+
+                var includeLight = this.gamePicker.weights.indexOf("light") != -1;
+                var includeMedium = this.gamePicker.weights.indexOf("medium") != -1;
+                var includeHeavy = this.gamePicker.weights.indexOf("heavy") != -1;
+
+                if (!includeLight) {
+                    filtered = filtered.filter(function(bg_item) {
+                        var weight = bg_item.boardgame.statistics.avg_weight;
+                        return weight >= 2.0;
+                    })
+                }
+                if (!includeMedium) {
+                    filtered = filtered.filter(function(bg_item) {
+                        var weight = bg_item.boardgame.statistics.avg_weight;
+                        return weight < 2.0 || weight >= 3.0;
+                    })
+                }
+                if (!includeHeavy) {
+                    filtered = filtered.filter(function(bg_item) {
+                        var weight = bg_item.boardgame.statistics.avg_weight;
+                        return weight < 3.0;
+                    })
+                }
+
+                var sorted = filtered;
+                sorted = sorted.sort((a, b) => a.boardgame.statistics.avg_rating - b.boardgame.statistics.avg_rating);
+                sorted.reverse();
+
+                        // sorted = sorted.sort((a, b) => a.boardgame.statistics.avg_weight - b.boardgame.statistics.avg_weight);
+
+                return sorted;
+            }
+            else {
+                return null;
+            }
+        },
     },
     mounted() {
         var self = this;
@@ -242,6 +309,17 @@ var collectionArea = new Vue({
             var mechanicStr = $(event.target).parent().attr("mechanic_id");
             // console.log("Removing " + mechanicStr);
             this.filter.mechanics.splice(this.filter.mechanics.indexOf(mechanicStr), 1);
+        },
+        filterPickedGames: function (event) {
+            $('#game_picker_modal').modal('hide')
+
+        },
+        isMobile() {
+            if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                return true
+            } else {
+                return false
+            }
         }
     }
 })

@@ -20,13 +20,16 @@
     <li class="nav-item">
         <a id="filter-toggle-btn" class="nav-link">Filter Panel</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="modal" data-target="#game_picker_modal">Game Picker</a>
+    </li>
 {% endblock %}
 
 {% block content %}
 
 {% if is_own_collection %}
 <!-- Modal -->
-<div class="modal fade" id="link_bgg_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="link_bgg_modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -56,13 +59,90 @@
 </div>
 {% endif %}
 
+<div class="modal fade" id="game_picker_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Let's pick some games!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group row">
+                        <label for="picker-num-players" class="col-sm-8 col-form-label">How many non-imaginary friends are you playing with?</label>
+                        <div class="col-sm-4">
+                            <input v-model.number="gamePicker.numPlayers" class="form-control" type="number" id="picker-num-players" placeholder="" min="0">
+                        </div>
+                    </div>
+
+                    <fieldset class="form-group">
+                        <label for="picker-mode" >How friendly are you feeling today?</label>
+                        <div class="form-check">
+                            <input v-model="gamePicker.coop" class="form-check-input" type="radio" name="picker-mode" id="picker-mode-coop" value="coop">
+                            <label class="form-check-label" for="picker-mode-coop">
+                                Friendship is Magic! Let's cooperate!
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input v-model="gamePicker.coop" class="form-check-input" type="radio" name="picker-mode" id="picker-mode-vs" value="vs">
+                            <label class="form-check-label" for="picker-mode-vs">
+                                This is Sparta!!! Let's compete!
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input v-model="gamePicker.coop" class="form-check-input" type="radio" name="picker-mode" id="picker-mode-both" value="both" checked>
+                            <label class="form-check-label" for="picker-mode-both" checked>
+                                I'm fine either way
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="form-group">
+                        <label for="picker-mode" >How complex of a game do you want? (You can pick more than one)</label>
+                        <div class="form-check">
+                            <input v-model="gamePicker.weights" class="form-check-input" type="checkbox" name="picker-mode" id="picker-mode-light" value="light" checked>
+                            <label class="form-check-label" for="picker-mode-light">
+                                Haven't had my coffee yet, something light please!
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input v-model="gamePicker.weights" class="form-check-input" type="checkbox" name="picker-mode" id="picker-mode-medium" value="medium" checked>
+                            <label class="form-check-label" for="picker-mode-medium">
+                                Give me a goldilocks game! Not too light, not too heavy, but just right.
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input v-model="gamePicker.weights" class="form-check-input" type="checkbox" name="picker-mode" id="picker-mode-heavy" value="heavy" checked>
+                            <label class="form-check-label" for="picker-mode-heavy">
+                                I want my brain to be dribbling out my ears by the end of the rules explanation.
+                            </label>
+                        </div>
+                    </fieldset>
+                    <div class="form-group row">
+                        <div class="col">
+                            <button v-on:click.stop.prevent="filterPickedGames" class="btn btn-primary" id="game-picker-button">Get Me Some Games!</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</form>
+                </div>
+            </div>
+<!--             <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div> -->
+        </div>
+    </div>
+</div>
+
 <!-- FILTER PANEL -->
 <div id="filter-panel-div" class="wrapper-div">
     <div id="filter-wrapper-div" class="form-row mt-4 mb-2">
-        <div class="filter-item col-xs-6 col-sm-4 col-md-3 col-lg-2">
-            <label class="form-check-label" for="filter-show-expansions">Show Expansions?</label>
-            <input type="checkbox" id="filter-show-expansions" v-model="filter.showExpansions">
-        </div>
         <div class="filter-item col-xs-6 col-sm-4 col-md-3 col-lg-2">
             <!-- <label class="" for="filter-mechanics">Select Mechanics:</label> -->
             <select id="filter-mechanics" title="Boardgame Mechanic" multiple data-live-search="true" v-model="filter.mechanics" >
@@ -78,19 +158,23 @@
         </div>
         <div class="filter-item col-xs-6 col-sm-4 col-md-4 col-lg-3">
             <label class="" for="filter-sort">Sort By:</label>
-            <select id="filter-sort" class="selectpicker" title="Sort By" v-model="filter.sortBy" >
-                <option selected>Alphabetical</option>
-                <option>BGG Rating</option>
+            <select id="filter-sort" class="selectpicker" title="Sort By" v-model="filter.sortBy" name="select-sort-by">
+                <option>Alphabetical</option>
+                <option selected>BGG Rating</option>
                 <option>User Rating</option>
                 <option>Num Plays</option>
                 <option>Min Players</option>
                 <option>Max Players</option>
                 <option>Complexity</option>
             </select>
-            <select id="filter-sort-order" class="selectpicker" title="" v-model="filter.sortByOrder" >
+            <select id="filter-sort-order" class="selectpicker" title="" v-model="filter.sortByOrder" name="select-sort-order">
                 <option selected>Desc</option>
                 <option>Asc</option>
             </select>
+        </div>
+        <div class="filter-item col-xs-6 col-sm-4 col-md-3 col-lg-2">
+            <label class="form-check-label" for="filter-show-expansions">Show Expansions?</label>
+            <input type="checkbox" id="filter-show-expansions" v-model="filter.showExpansions">
         </div>
     </div>
     <div id="selected-mechanics" class="d-flex flex-wrap">
@@ -105,11 +189,17 @@
 
 <!-- COLLECTION AREA -->
 <div id="collection-div" class="d-flex flex-wrap wrapper-div pt-4">
-    <div class="bg-container" v-for="bg_item in filteredAndSortedCollection" :key="bg_item.boardgame.bgg_id">
+    <div class="bg-container" v-for="bg_item in curatedCollection" :key="bg_item.boardgame.bgg_id">
         <div class="card h-100 bg-card">
             <div class="square-image-div-wrapper">
-                <div class="square-image-div"
+                <div v-if="!isMobile()" class="square-image-div"
                     v-bind:style="{ 'background-image': 'url(' + bg_item.boardgame.image_link + ')' }"
+                    v-tooltip:right="bg_item.boardgame.name"
+                    v-bind:bgg_id="bg_item.boardgame.bgg_id">
+                    <!-- <img class="card-img-top boardgame-image" :src=bg_item.boardgame.image_link alt="Card image cap"> -->
+                </div>
+                <div v-else class="square-image-div"
+                    v-bind:style="{ 'background-image': 'url(' + bg_item.boardgame.thumbnail + ')' }"
                     v-tooltip:right="bg_item.boardgame.name"
                     v-bind:bgg_id="bg_item.boardgame.bgg_id">
                     <!-- <img class="card-img-top boardgame-image" :src=bg_item.boardgame.image_link alt="Card image cap"> -->
@@ -148,6 +238,10 @@
             <tr>
                 <th scope="row">Complexity:</th>
                 <td>[[bg_item.boardgame.statistics.avg_weight_2dp]]</td>
+            </tr>
+            <tr>
+                <th scope="row">Best Player Count:</th>
+                <td >[[bg_item.boardgame.player_suggestions.best.join(", ")]]</td>
             </tr>
             <tr>
                 <th scope="row">Num Plays:</th>

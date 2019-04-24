@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-# from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.fields import ArrayField
 
 # https://boardgamegeek.com/xmlapi2/thing?id=266192&stats=1
 
@@ -32,6 +32,32 @@ class BoardGameManager(models.Manager):
             avg_weight = bgg_game.stats["averageweight"],
             bayesian_avg_rating = bgg_game.rating_bayes_average,
             rank = bgg_game.bgg_rank,
+        )
+
+        # TODO CALCULATE PLAYER_SUGGESTIONS STATS
+        player_suggestions_dict = {}
+        bgg_player_suggestions = bgg_game.player_suggestions
+
+        recommended = []
+        best = []
+
+        # If a game has more recommended/best votes than not recommended, then
+        # it's recommended. If it has more best than recommended votes, it's best
+        # at that player count
+        for ps in bgg_player_suggestions:
+            player_count = ps.numeric_player_count
+
+            if (ps.recommended + ps.best) > ps.not_recommended:
+                recommended.append(player_count)
+
+                if ps.best > ps.recommended:
+                    best.append(player_count)
+
+
+        ddb_boardgame_player_suggestions = BoardGamePlayerSuggestions.objects.create(
+            boardgame = ddb_boardgame,
+            recommended = recommended,
+            best = best,
         )
 
         # Create mechanic objects if they don't already exist, otherwise
@@ -135,6 +161,11 @@ class BoardGameStatistics(models.Model):
     avg_weight = models.FloatField(null=True)
     bayesian_avg_rating = models.FloatField(null=True)
     rank = models.IntegerField(null=True)
+
+class BoardGamePlayerSuggestions(models.Model):
+    boardgame = models.OneToOneField(BoardGame, on_delete=models.CASCADE, related_name='player_suggestions')
+    recommended = ArrayField(models.IntegerField(blank=True))
+    best = ArrayField(models.IntegerField(blank=True))
 
 # TODO handle ranks
 class BoardGameRank(models.Model):

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import BoardGame, BoardGameCategory, BoardGameMechanic, \
                     BoardGameFamily, BoardGameStatistics, BoardGameRank, \
-                    Collection, CollectionBoardGame
+                    BoardGamePlayerSuggestions, Collection, CollectionBoardGame
 from django.contrib.auth.models import User
 
 class BoardGameCategorySerializer(serializers.ModelSerializer):
@@ -39,6 +39,11 @@ class BoardGameStatisticsSerializer(serializers.ModelSerializer):
         model = BoardGameStatistics
         fields = ['num_ratings', 'avg_rating', 'bayesian_avg_rating', 'avg_weight', 'rank', 'sub_ranks']
 
+class BoardGamePlayerSuggestionsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BoardGamePlayerSuggestions
+        fields = ['recommended', 'best']
 
 class BoardGameSerializer(serializers.ModelSerializer):
 
@@ -46,13 +51,14 @@ class BoardGameSerializer(serializers.ModelSerializer):
     mechanics = BoardGameMechanicSerializer(many=True)
     families = BoardGameFamilySerializer(many=True)
     statistics = BoardGameStatisticsSerializer(required=True)
+    player_suggestions = BoardGamePlayerSuggestionsSerializer(required=True)
 
     class Meta:
         model = BoardGame
         fields = ['bgg_id', 'image_link', 'thumbnail', 'name', 'description',
                   'year_published', 'min_players', 'max_players', 'play_time',
                   'min_play_time', 'max_play_time', 'is_expansion', 'categories',
-                  'mechanics', 'families', 'statistics']
+                  'mechanics', 'families', 'statistics', 'player_suggestions']
 
 
 class CollectionBoardGameSerializer(serializers.ModelSerializer):
