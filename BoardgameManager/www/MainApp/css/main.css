@@ -29,6 +29,10 @@
     margin-right: auto;
 }
 
+#curated-collection-div .bg-card .card-title {
+    font-size: 1rem;
+}
+
 @media (min-width: 0px) {
     #curated-collection-modal > .modal-dialog {
         max-width: 90%;
@@ -136,7 +140,7 @@
     background-position: center top;
 }
 
-[class$="bg-container"] {
+.bg-container, .curated-bg-container {
     padding: 5px;
 }
 
@@ -155,7 +159,7 @@
     font-size: 1.2rem;
 }
 
-[class$="wrapper-div"] {
+.wrapper-div, .curated-wrapper-div {
     margin-left: auto;
     margin-right: auto;
     padding-left:2em;
