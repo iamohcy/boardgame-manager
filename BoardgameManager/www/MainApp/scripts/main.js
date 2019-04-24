@@ -311,14 +311,16 @@ var collectionArea = new Vue({
             this.filter.mechanics.splice(this.filter.mechanics.indexOf(mechanicStr), 1);
         },
         filterPickedGames: function (event) {
-            $('#game_picker_modal').modal('hide')
+            $('#game-picker-modal').modal('hide');
+            $('#curated-collection-modal').modal('show');
 
+            this.showCuratedGames = true;
         },
         isMobile() {
             if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                return true
+                return true;
             } else {
-                return false
+                return false;
             }
         }
     }

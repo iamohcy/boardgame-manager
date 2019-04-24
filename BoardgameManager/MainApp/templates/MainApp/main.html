@@ -14,14 +14,14 @@
 {% block navbar_links %}
     {% if is_own_collection %}
     <li class="nav-item">
-        <a class="nav-link" data-toggle="modal" data-target="#link_bgg_modal">Link BGG Account</a>
+        <a class="nav-link" data-toggle="modal" data-target="#link-bgg-modal">Link BGG Account</a>
     </li>
     {% endif %}
     <li class="nav-item">
         <a id="filter-toggle-btn" class="nav-link">Filter Panel</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" data-toggle="modal" data-target="#game_picker_modal">Game Picker</a>
+        <a class="nav-link" data-toggle="modal" data-target="#game-picker-modal">Game Picker</a>
     </li>
 {% endblock %}
 
@@ -29,11 +29,11 @@
 
 {% if is_own_collection %}
 <!-- Modal -->
-<div class="modal fade" id="link_bgg_modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="link-bgg-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Connect your Board Game Geek account!</h5>
+                <h5 class="modal-title" id="link-bgg-modal-title">Connect your Board Game Geek account!</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -59,11 +59,11 @@
 </div>
 {% endif %}
 
-<div class="modal fade" id="game_picker_modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="game-picker-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Let's pick some games!</h5>
+                <h5 class="modal-title" id="game-picker-modal-title">Let's pick some games!</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -127,15 +127,49 @@
                     </div>
                 </form>
             </div>
-        </div>
-    </div>
-</form>
-                </div>
-            </div>
 <!--             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary">Save changes</button>
             </div> -->
+        </div>
+    </div>
+</div>
+
+<!-- Curated Collection -->
+<div class="modal fade" id="curated-collection-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="curated-collection-modal-title">Why don't you try these games?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="curated-collection-div" class="d-flex flex-wrap curated-wrapper-div">
+                    <div class="bg-container" v-for="bg_item in curatedCollection" :key="bg_item.boardgame.bgg_id">
+                        <div class="card h-100 bg-card">
+                            <div class="square-image-div-wrapper">
+                                <div v-if="!isMobile()" class="square-image-div"
+                                    v-bind:style="{ 'background-image': 'url(' + bg_item.boardgame.image_link + ')' }"
+                                    v-tooltip:right="bg_item.boardgame.name"
+                                    v-bind:bgg_id="bg_item.boardgame.bgg_id">
+                                    <!-- <img class="card-img-top boardgame-image" :src=bg_item.boardgame.image_link alt="Card image cap"> -->
+                                </div>
+                                <div v-else class="square-image-div"
+                                    v-bind:style="{ 'background-image': 'url(' + bg_item.boardgame.thumbnail + ')' }"
+                                    v-tooltip:right="bg_item.boardgame.name"
+                                    v-bind:bgg_id="bg_item.boardgame.bgg_id">
+                                    <!-- <img class="card-img-top boardgame-image" :src=bg_item.boardgame.image_link alt="Card image cap"> -->
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">[[bg_item.boardgame.name]]</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -189,7 +223,7 @@
 
 <!-- COLLECTION AREA -->
 <div id="collection-div" class="d-flex flex-wrap wrapper-div pt-4">
-    <div class="bg-container" v-for="bg_item in curatedCollection" :key="bg_item.boardgame.bgg_id">
+    <div class="bg-container" v-for="bg_item in filteredAndSortedCollection" :key="bg_item.boardgame.bgg_id">
         <div class="card h-100 bg-card">
             <div class="square-image-div-wrapper">
                 <div v-if="!isMobile()" class="square-image-div"

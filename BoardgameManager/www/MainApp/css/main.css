@@ -21,6 +21,85 @@
 }
 
 /*********************************************************************************/
+/* CURATED COLLECTION */
+/*********************************************************************************/
+
+#curated-collection-modal > .modal-dialog {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (min-width: 0px) {
+    #curated-collection-modal > .modal-dialog {
+        max-width: 90%;
+    }
+}
+
+@media (min-width: 992px) {
+    #curated-collection-modal > .modal-dialog {
+        max-width: 80%;
+    }
+}
+
+@media (min-width: 1500px) {
+    #curated-collection-modal > .modal-dialog {
+        max-width: 75%;
+    }
+}
+
+@media (min-width: 1800px) {
+    #curated-collection-modal > .modal-dialog {
+        max-width: 65%;
+    }
+}
+
+
+@media (min-width: 0px) {
+    .curated-bg-container {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 50% !important;
+        flex: 0 0 50% !important;
+        max-width: 50%;
+    }
+}
+
+@media (min-width: 576px) {
+    .curated-bg-container {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 33% !important;
+        flex: 0 0 33% !important;
+        max-width: 33%;
+    }
+}
+
+@media (min-width: 768px) {
+    .curated-bg-container {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 25% !important;
+        flex: 0 0 25% !important;
+        max-width: 25%;
+    }
+}
+
+@media (min-width: 992px) {
+    .curated-bg-container {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 20% !important;
+        flex: 0 0 20% !important;
+        max-width: 20%;
+    }
+}
+
+@media (min-width: 1500) {
+    .curated-bg-container {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 20% !important;
+        flex: 0 0 20% !important;
+        max-width: 20%;
+    }
+}
+
+/*********************************************************************************/
 /* COLLECTION */
 /*********************************************************************************/
 
@@ -57,7 +136,7 @@
     background-position: center top;
 }
 
-.bg-container {
+[class$="bg-container"] {
     padding: 5px;
 }
 
@@ -76,7 +155,7 @@
     font-size: 1.2rem;
 }
 
-.wrapper-div {
+[class$="wrapper-div"] {
     margin-left: auto;
     margin-right: auto;
     padding-left:2em;
