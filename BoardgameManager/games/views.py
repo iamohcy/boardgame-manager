@@ -120,7 +120,7 @@ def processCollection(request, bgg_collection):
     # Step 2 - Update or create collection board game object
     for bgg_c_game in bgg_collection.items:
         bgg_id = bgg_c_game.id
-        if (bgg_c_game.id in valid_game_ids):
+        if (bgg_c_game.id in valid_game_ids and bgg_c_game.owned):
             # This is different from board game object which is one per game
             # For this, every user has a collection board game object per game
             # in his/her collection

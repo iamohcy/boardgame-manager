@@ -167,7 +167,7 @@ var collectionArea = new Vue({
                         sorted = sorted.sort((a, b) => a.boardgame.name.localeCompare(b.boardgame.name));
                     }
                     else if (this.filter.sortBy === "BGG Rating") {
-                        sorted = sorted.sort((a, b) => a.boardgame.statistics.avg_rating - b.boardgame.statistics.avg_rating);
+                        sorted = sorted.sort((a, b) => a.boardgame.statistics.bayesian_avg_rating - b.boardgame.statistics.bayesian_avg_rating);
                     }
                     else if (this.filter.sortBy === "User Rating") {
                         sorted = sorted.sort((a, b) => a.rating - b.rating);
@@ -205,7 +205,7 @@ var collectionArea = new Vue({
                 var MIN_CURATED_RATING = 6.75;
                 // Filter out games with BGG rating less than 6.75
                 filtered = filtered.filter(function(bg_item) {
-                    return bg_item.boardgame.statistics.avg_rating >= MIN_CURATED_RATING;
+                    return bg_item.boardgame.statistics.bayesian_avg_rating >= MIN_CURATED_RATING;
                 })
 
                 if (this.gamePicker.numPlayers > 0) {
@@ -252,7 +252,7 @@ var collectionArea = new Vue({
                 }
 
                 var sorted = filtered;
-                sorted = sorted.sort((a, b) => a.boardgame.statistics.avg_rating - b.boardgame.statistics.avg_rating);
+                sorted = sorted.sort((a, b) => a.boardgame.statistics.bayesian_avg_rating - b.boardgame.statistics.bayesian_avg_rating);
                 sorted.reverse();
 
                         // sorted = sorted.sort((a, b) => a.boardgame.statistics.avg_weight - b.boardgame.statistics.avg_weight);
@@ -281,6 +281,7 @@ var collectionArea = new Vue({
                     bg.mechanics = _.map(bg.mechanics, (m => m.name));
                     // Set avg_rating/avg_weight display as avg_rating to two decimal places
                     bg.statistics.avg_rating_2dp = bg.statistics.avg_rating.toFixed(2);
+                    bg.statistics.bayesian_avg_rating_2dp = bg.statistics.bayesian_avg_rating.toFixed(2);
                     bg.statistics.avg_weight_2dp = bg.statistics.avg_weight.toFixed(2);
                 }
                 // self.collection.boardgames = _.invoke(self.collection.boardgames, (bg =>
