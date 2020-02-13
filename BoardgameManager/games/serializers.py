@@ -67,7 +67,7 @@ class CollectionBoardGameSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CollectionBoardGame
-        fields = ['boardgame', 'num_plays', 'rating', 'date_purchased']
+        fields = ['boardgame', 'num_plays', 'num_votes', 'rating', 'date_purchased']
 
 class UserSerializer(serializers.ModelSerializer):
 

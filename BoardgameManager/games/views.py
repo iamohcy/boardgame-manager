@@ -94,6 +94,7 @@ def processCollection(request, bgg_collection):
         except:
             # Add game to list of games (by id) that we want to get from boardgamegeek
             new_game_ids.append(bgg_id)
+            # print("It does not exists!! bgg_id: " + str(bgg_id)) # DEBUG
 
     # Step 1b - Create BoardGame objects if they don't already exist
     if new_game_ids:
@@ -111,7 +112,7 @@ def processCollection(request, bgg_collection):
         for bgg_game in bgg_new_games:
             # We don't want to classify accessories as games
             # Make sure user actually owns the game before adding to collection
-            if (not bgg_game.accessory) and (bgg_c_game.owned):
+            if (not bgg_game.accessory):
                 print("Does not exist! Creating board game %s!" % (bgg_game.name))
                 ddb_boardgame = BoardGame.objects.create_boardgame(bgg_game)
                 valid_game_ids.append(bgg_game.id)
@@ -137,9 +138,33 @@ def processCollection(request, bgg_collection):
                 ddb_boardgame = BoardGame.objects.get(pk=bgg_id)
                 ddb_c_game = user_collection_set.create(boardgame=ddb_boardgame,
                                                         num_plays=bgg_c_game.numplays,
+                                                        num_votes=0,
                                                         rating=bgg_c_game.rating)
 
     return all_games
+
+# def set_votes(request):
+#     if request.method == 'POST': # If the form has been submitted...
+
+#         form = LinkBggForm(request.POST) # A form bound to the POST data
+#         if form.is_valid(): # All validation rules pass
+#             # Process the data in form.cleaned_data
+#             print(form.cleaned_data['bgg_username'])
+#             try:
+#                 list_of_games = getCollection(request, form.cleaned_data['bgg_username'])
+#                 response = JsonResponse({'bgg_username': form.cleaned_data['bgg_username'],
+#                                          'games': list_of_games})
+#                 return response
+
+#             except BGGItemNotFoundError:
+#                 return JsonResponse({'Error': 'User not found!'})
+#         else:
+#             return JsonResponse({'Error': 'invalid form!'})
+
+#         # return redirect('/')
+#         # return response
+#     else:
+#         return HttpResponse("Invalid non POST call to link_bgg!")
 
 @login_required
 def link_bgg(request):

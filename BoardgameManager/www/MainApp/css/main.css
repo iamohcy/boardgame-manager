@@ -166,7 +166,14 @@
 
 .bg-card .card-title {
     margin-bottom: 0px;
-    font-size: 1.2rem;
+    font-size: 1.0rem;
+}
+
+.bg-card .card-vote-count {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    font-size: 1.0rem;
+    color: #3333ee;
 }
 
 .wrapper-div {

@@ -94,6 +94,7 @@ class BoardGameManager(models.Manager):
                     # Board game already in database
                     ddb_family = BoardGameFamily.objects.get(pk=family_name)
                 except:
+                    print (family_name)
                     ddb_family = BoardGameFamily.objects.create(
                         name = family_name,
                     )
@@ -110,19 +111,19 @@ class BoardGameManager(models.Manager):
         return ddb_boardgame
 
 class BoardGameCategory(models.Model):
-    name = models.CharField(max_length=50, primary_key=True)
+    name = models.CharField(max_length=100, primary_key=True)
 
     def __str__(self):
         return self.name
 
 class BoardGameMechanic(models.Model):
-    name = models.CharField(max_length=50, primary_key=True)
+    name = models.CharField(max_length=100, primary_key=True)
 
     def __str__(self):
         return self.name
 
 class BoardGameFamily(models.Model):
-    name = models.CharField(max_length=50, primary_key=True)
+    name = models.CharField(max_length=100, primary_key=True)
 
     def __str__(self):
         return self.name
@@ -170,7 +171,7 @@ class BoardGamePlayerSuggestions(models.Model):
 # TODO handle ranks
 class BoardGameRank(models.Model):
     bg_stats = models.ForeignKey(BoardGameStatistics, on_delete=models.CASCADE, related_name='sub_ranks')
-    subtype = models.CharField(max_length=60)
+    subtype = models.CharField(max_length=100)
     rank = models.IntegerField(null=True)
 
 # Contains user rating and other details about a game
@@ -183,6 +184,7 @@ class CollectionBoardGame(models.Model):
     boardgame = models.ForeignKey(BoardGame, on_delete=models.CASCADE)
     # name = models.TextField()
     num_plays = models.IntegerField()
+    num_votes = models.IntegerField()
     rating = models.FloatField(null=True) # not all games will have been rated
     date_purchased = models.DateField(blank=True, null=True, verbose_name="Date of Purchase")
 
