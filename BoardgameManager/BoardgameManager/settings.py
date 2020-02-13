@@ -24,7 +24,8 @@ SECRET_KEY = 'r4i3e76wvz_vmvi6vc8y(7q2t)q%4^s&#kfih&m84f_4=af6w&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['dicedicebaby.ap-southeast-1.elasticbeanstalk.com', '127.0.0.1']
+# ALLOWED_HOSTS = ['dicedicebaby.ap-southeast-1.elasticbeanstalk.com', '127.0.0.1']
+ALLOWED_HOSTS = ['178.128.93.218', '127.0.0.1']
 
 # Application definition
 
